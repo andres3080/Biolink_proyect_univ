@@ -1,0 +1,378 @@
+.dashboard {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  color: #eaf4f3;
+  font-family: "Public Sans", system-ui, sans-serif;
+  background:
+    radial-gradient(1300px circle at 82% -8%, rgba(47, 175, 184, 0.2), transparent 55%),
+    radial-gradient(1000px circle at -8% 102%, rgba(240, 137, 90, 0.14), transparent 55%),
+    linear-gradient(170deg, #06100f 0%, #0a1d20 55%, #0a2528 100%);
+}
+.dashboard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.dashboard::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 60%, rgba(4, 10, 11, 0.5) 100%);
+  pointer-events: none;
+}
+
+.dashboard header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 26px 32px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dashboard header .lockup {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: "Sora", sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #f4faf9;
+}
+
+.dashboard header .user-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 0.85rem;
+  color: #a9c6c8;
+}
+
+.dashboard header .rol-badge {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(95, 214, 223, 0.12);
+  border: 1px solid rgba(95, 214, 223, 0.3);
+  color: #8fe3d6;
+}
+
+.dashboard header button {
+  font-family: "Sora", sans-serif;
+  font-weight: 600;
+  font-size: 0.82rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #eaf4f3;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.dashboard main {
+  position: relative;
+  z-index: 2;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 48px 32px;
+}
+
+.dashboard main h1 {
+  font-family: "Sora", sans-serif;
+  font-size: 1.6rem;
+  margin: 0 0 10px;
+}
+
+.dashboard main p {
+  color: #a9c6c8;
+  max-width: 60ch;
+}
+
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  align-items: start;
+  gap: 28px;
+  margin-top: 32px;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 280px));
+  gap: 16px;
+}
+
+.stats-panel {
+  background: rgba(16, 38, 42, 0.5);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 22px 20px;
+  position: sticky;
+  top: 24px;
+}
+
+.stats-panel h2 {
+  font-family: "Sora", sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #f4faf9;
+  margin: 0 0 16px;
+}
+
+.stat-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.stat-row:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+.stat-label {
+  font-size: 0.82rem;
+  color: #a9c6c8;
+}
+
+.stat-value {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #8fe3d6;
+}
+
+.stats-note {
+  margin: 16px 0 0;
+  font-size: 0.7rem;
+  color: #64888b;
+  max-width: none;
+}
+
+@media (max-width: 900px) {
+  .dashboard-layout {
+    grid-template-columns: 1fr;
+  }
+  .stats-panel {
+    position: static;
+  }
+}
+
+.action-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(16, 38, 42, 0.5);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 20px;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease,
+    background 0.22s ease;
+}
+
+.action-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #5fd6df, #7fd4da 45%, #f0895a);
+  transition: height 0.22s ease;
+}
+
+.action-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 0%), rgba(143, 227, 214, 0.14), transparent 65%);
+  opacity: 0;
+  transition: opacity 0.22s ease;
+  pointer-events: none;
+}
+
+.action-card:hover,
+.action-card:focus-visible {
+  transform: translateY(-5px);
+  border-color: rgba(143, 227, 214, 0.35);
+  background: rgba(19, 45, 49, 0.65);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.35);
+}
+
+.action-card:hover::before,
+.action-card:focus-visible::before {
+  height: 4px;
+}
+
+.action-card:hover::after,
+.action-card:focus-visible::after {
+  opacity: 1;
+}
+
+.action-card:active {
+  transform: translateY(-2px) scale(0.99);
+}
+
+.action-card .action-title {
+  font-family: "Sora", sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #f4faf9;
+}
+
+.action-card .action-arrow {
+  display: inline-block;
+  transition: transform 0.22s ease;
+}
+
+.action-card:hover .action-arrow,
+.action-card:focus-visible .action-arrow {
+  transform: translateX(4px);
+}
+
+.action-card .action-desc {
+  font-size: 0.8rem;
+  color: #8fabae;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .action-card,
+  .action-card::before,
+  .action-card::after,
+  .action-card .action-arrow {
+    transition: none;
+  }
+  .action-card:hover,
+  .action-card:focus-visible {
+    transform: none;
+  }
+}
+
+/* Tarjeta y widget de estado de equipos HL7 — se destacan del resto porque
+   muestran datos en vivo, no solo un enlace de navegación. */
+.equipo-status-card {
+  border-color: rgba(126, 214, 154, 0.3);
+  background: linear-gradient(135deg, rgba(126, 214, 154, 0.09), rgba(16, 38, 42, 0.5));
+}
+
+.equipo-status-card::before {
+  background: linear-gradient(90deg, #7ed69a, #5fd6df 55%, #7ed69a);
+}
+
+.equipo-status-card .action-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.equipo-mini-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.equipo-mini-dot.conectado {
+  background: #7ed69a;
+  box-shadow: 0 0 6px rgba(126, 214, 154, 0.75);
+  animation: equipo-pulse 2s ease-in-out infinite;
+}
+
+.equipo-mini-dot.desconectado {
+  background: #5c787b;
+}
+
+@keyframes equipo-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.equipos-live-value {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .equipo-mini-dot.conectado {
+    animation: none;
+  }
+}
+
+/* Enlace "Crear usuario" en el header — a propósito no es un botón con
+   fondo como "Cerrar sesión": es una acción secundaria, solo para ADMIN. */
+.create-user-link {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  color: #7fd4da;
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: 1px dashed rgba(127, 212, 218, 0.5);
+  padding-bottom: 1px;
+}
+
+.create-user-link:hover,
+.create-user-link:focus-visible {
+  color: #bfe9ec;
+  border-bottom-color: #bfe9ec;
+}
+
+/* Nombre de usuario y rol junto al saludo principal */
+.dashboard main h1 {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.welcome-user {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Public Sans", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: #a9c6c8;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 4px 6px 4px 12px;
+}
+
+.welcome-user-rol {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(95, 214, 223, 0.12);
+  border: 1px solid rgba(95, 214, 223, 0.3);
+  color: #8fe3d6;
+}

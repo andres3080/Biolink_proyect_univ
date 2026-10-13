@@ -1,0 +1,226 @@
+.exam-catalog-page {
+  min-height: 100vh;
+  background: linear-gradient(170deg, #06100f 0%, #0a1d20 55%, #0a2528 100%);
+  color: #eaf4f3;
+  font-family: "Public Sans", system-ui, sans-serif;
+  padding: 48px 32px;
+  display: flex;
+  justify-content: center;
+}
+
+.exam-catalog-wrap {
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.exam-catalog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.exam-catalog-header h1 {
+  font-family: "Sora", sans-serif;
+  font-size: 1.3rem;
+  margin: 0 0 4px;
+}
+
+.exam-catalog-header p {
+  font-size: 0.8rem;
+  color: #8fabae;
+  margin: 0;
+}
+
+.exam-catalog-header .back-link {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.76rem;
+  color: #7fd4da;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.exam-catalog-card {
+  background: rgba(18, 42, 46, 0.55);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  padding: 28px 30px 32px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.exam-catalog-card h2 {
+  font-family: "Sora", sans-serif;
+  font-size: 1.05rem;
+  margin: 0 0 18px;
+}
+
+.exam-catalog-card .field-row {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.exam-catalog-card .field-row.three {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.exam-catalog-card .field {
+  text-align: left;
+}
+
+.exam-catalog-card label {
+  display: block;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  color: #8fabae;
+  margin-bottom: 6px;
+}
+
+.exam-catalog-card input {
+  width: 100%;
+  height: 42px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 0 13px;
+  font-size: 0.88rem;
+  color: #e7f1f0;
+  font-family: "Public Sans", sans-serif;
+}
+
+.exam-catalog-card input::placeholder {
+  color: #5c787b;
+}
+
+.exam-catalog-card input:focus {
+  outline: none;
+  border-color: #5fd6df;
+}
+
+.exam-form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.exam-catalog-card button.cta {
+  height: 42px;
+  border: none;
+  cursor: pointer;
+  border-radius: 11px;
+  background: linear-gradient(135deg, #f0895a, #e0672f);
+  box-shadow: 0 10px 26px rgba(232, 112, 58, 0.38);
+  color: #fff6f0;
+  font-family: "Sora", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 0.88rem;
+  letter-spacing: 0.01em;
+  padding: 0 22px;
+}
+
+.exam-catalog-card button.cta:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.exam-catalog-card button.secondary {
+  height: 42px;
+  border-radius: 11px;
+  padding: 0 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #e7f1f0;
+  font-family: "Sora", system-ui, sans-serif;
+  font-size: 0.86rem;
+  cursor: pointer;
+}
+
+.exam-catalog-card .form-error {
+  background: rgba(224, 76, 76, 0.12);
+  border: 1px solid rgba(224, 76, 76, 0.35);
+  color: #f3b4b4;
+  font-size: 0.82rem;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.exam-catalog-card .form-info {
+  background: rgba(95, 214, 223, 0.12);
+  border: 1px solid rgba(95, 214, 223, 0.35);
+  color: #bfe9ec;
+  font-size: 0.82rem;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.exam-table-wrap {
+  overflow-x: auto;
+}
+
+.exam-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+
+.exam-table th {
+  text-align: left;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8fabae;
+  padding: 0 12px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  white-space: nowrap;
+}
+
+.exam-table td {
+  padding: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: #e7f1f0;
+  white-space: nowrap;
+}
+
+.exam-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.exam-table tbody tr.editing {
+  background: rgba(95, 214, 223, 0.08);
+}
+
+.exam-table button.link-edit {
+  background: none;
+  border: none;
+  color: #7fd4da;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.76rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.exam-empty {
+  color: #8fabae;
+  font-size: 0.88rem;
+  padding: 20px 0;
+  text-align: center;
+}
+
+@media (max-width: 560px) {
+  .exam-catalog-card .field-row,
+  .exam-catalog-card .field-row.three {
+    grid-template-columns: 1fr;
+  }
+}

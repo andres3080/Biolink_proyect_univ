@@ -1,0 +1,23 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Public Sans", system-ui, sans-serif;
+  line-height: 1.65;
+  background: #06100f;
+}
+
+p {
+  margin: 0;
+}
+
+code {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+}

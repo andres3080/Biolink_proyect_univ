@@ -1,0 +1,151 @@
+.patient-form-page {
+  min-height: 100vh;
+  background: linear-gradient(170deg, #06100f 0%, #0a1d20 55%, #0a2528 100%);
+  color: #eaf4f3;
+  font-family: "Public Sans", system-ui, sans-serif;
+  padding: 48px 32px;
+  display: flex;
+  justify-content: center;
+}
+
+.patient-form-card {
+  width: 100%;
+  max-width: 560px;
+  height: fit-content;
+  background: rgba(18, 42, 46, 0.55);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  padding: 32px 34px 36px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.patient-form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 26px;
+}
+
+.patient-form-header h1 {
+  font-family: "Sora", sans-serif;
+  font-size: 1.3rem;
+  margin: 0;
+}
+
+.back-link {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.76rem;
+  color: #7fd4da;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.patient-form-card .field {
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+.patient-form-card .field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.patient-form-card label {
+  display: block;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  color: #8fabae;
+  margin-bottom: 6px;
+}
+
+.patient-form-card input,
+.patient-form-card select {
+  width: 100%;
+  height: 42px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 0 13px;
+  font-size: 0.9rem;
+  color: #e7f1f0;
+  font-family: "Public Sans", sans-serif;
+}
+
+.patient-form-card input::placeholder {
+  color: #5c787b;
+}
+
+.patient-form-card input:focus,
+.patient-form-card select:focus {
+  outline: none;
+  border-color: #5fd6df;
+}
+
+.patient-form-card select {
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #8fabae 50%),
+    linear-gradient(135deg, #8fabae 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) calc(50% - 3px),
+    calc(100% - 13px) calc(50% - 3px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+.patient-form-card select option {
+  background: #0a1d20;
+  color: #e7f1f0;
+}
+
+.patient-form-card button.cta {
+  width: 100%;
+  height: 44px;
+  border: none;
+  cursor: pointer;
+  border-radius: 11px;
+  background: linear-gradient(135deg, #f0895a, #e0672f);
+  box-shadow: 0 10px 26px rgba(232, 112, 58, 0.38);
+  color: #fff6f0;
+  font-family: "Sora", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 0.94rem;
+  letter-spacing: 0.01em;
+  margin-top: 6px;
+}
+
+.patient-form-card button.cta:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.patient-form-card .form-error {
+  background: rgba(224, 76, 76, 0.12);
+  border: 1px solid rgba(224, 76, 76, 0.35);
+  color: #f3b4b4;
+  font-size: 0.82rem;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.patient-form-card .form-info {
+  background: rgba(95, 214, 223, 0.12);
+  border: 1px solid rgba(95, 214, 223, 0.35);
+  color: #bfe9ec;
+  font-size: 0.82rem;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+@media (max-width: 560px) {
+  .patient-form-card .field-row {
+    grid-template-columns: 1fr;
+  }
+}

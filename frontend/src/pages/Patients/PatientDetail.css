@@ -1,0 +1,158 @@
+.patient-detail-page {
+  min-height: 100vh;
+  background: linear-gradient(170deg, #06100f 0%, #0a1d20 55%, #0a2528 100%);
+  color: #eaf4f3;
+  font-family: "Public Sans", system-ui, sans-serif;
+  padding: 48px 32px;
+  display: flex;
+  justify-content: center;
+}
+
+.patient-detail-wrap {
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.patient-detail-loading,
+.patient-detail-error {
+  color: #8fabae;
+  font-size: 0.9rem;
+}
+
+.patient-detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: rgba(18, 42, 46, 0.55);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  padding: 28px 30px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.patient-detail-header h1 {
+  font-family: "Sora", sans-serif;
+  font-size: 1.4rem;
+  margin: 0 0 12px;
+}
+
+.patient-detail-header .back-link {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.76rem;
+  color: #7fd4da;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.patient-detail-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px 32px;
+}
+
+.patient-detail-fact {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.patient-detail-fact span:first-child {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8fabae;
+}
+
+.patient-detail-fact span:last-child {
+  font-size: 0.92rem;
+  color: #e7f1f0;
+}
+
+.patient-detail-section {
+  background: rgba(18, 42, 46, 0.55);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  padding: 24px 28px 28px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.patient-detail-section h2 {
+  font-family: "Sora", sans-serif;
+  font-size: 1.05rem;
+  margin: 0 0 16px;
+}
+
+.patient-detail-empty {
+  color: #8fabae;
+  font-size: 0.86rem;
+  padding: 10px 0;
+}
+
+.patient-detail-table-wrap {
+  overflow-x: auto;
+}
+
+.patient-detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.patient-detail-table th {
+  text-align: left;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8fabae;
+  padding: 0 12px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  white-space: nowrap;
+}
+
+.patient-detail-table td {
+  padding: 11px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: #e7f1f0;
+  white-space: nowrap;
+}
+
+.patient-detail-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.exam-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: 320px;
+  white-space: normal;
+}
+
+.exam-tag {
+  display: inline-block;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.7rem;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #bfe9ec;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .patient-detail-header {
+    flex-direction: column;
+  }
+}
