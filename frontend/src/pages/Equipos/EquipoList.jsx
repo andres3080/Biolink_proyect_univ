@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { listarEquipos, listarEventosDeEquipo } from '../../api/equipoService.js'
+import EmptyState from '../../components/EmptyState.jsx'
+import { SkeletonTable } from '../../components/Skeleton.jsx'
 import './EquipoList.css'
 
 function formatFechaHora(fecha) {
@@ -82,10 +84,14 @@ export default function EquipoList() {
           </p>
         )}
 
+        {loading && <SkeletonTable filas={3} columnas={3} />}
+
         {!loading && !error && equipos.length === 0 && (
-          <p className="equipo-empty">
-            Todavía no se ha conectado ningún equipo por HL7. Aparecerán acá en cuanto manden o reciban un mensaje.
-          </p>
+          <EmptyState
+            icono="senal"
+            titulo="Ningún equipo conectado todavía"
+            texto="Aparecerán aquí en cuanto manden o reciban un mensaje HL7."
+          />
         )}
 
         <div className="equipo-grid">

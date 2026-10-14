@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext.jsx'
 import { obtenerEstadisticasPublicas } from '../../api/statsService.js'
 import PulseBanner from '../../components/PulseBanner.jsx'
+import PlanesSection from '../../components/PlanesSection.jsx'
+import useCountUp from '../../hooks/useCountUp.js'
 import './Login.css'
 
 export default function Login() {
@@ -20,8 +22,16 @@ export default function Login() {
       : null
   )
   const [stats, setStats] = useState(null)
+  const [verPassword, setVerPassword] = useState(false)
 
-  const from = location.state?.from?.pathname ?? '/'
+  const nPacientes = useCountUp(stats?.pacientes)
+  const nResultados = useCountUp(stats?.resultados)
+  const nMuestras = useCountUp(stats?.muestras)
+  const mostrar = (n) => (n === null || n === undefined ? '—' : n.toLocaleString('es-CO'))
+
+  // Si venía de una página protegida (p. ej. /checkout?plan=...), vuelve ahí tras entrar.
+  const origen = location.state?.from
+  const from = origen?.pathname ? `${origen.pathname}${origen.search || ''}` : '/'
 
   useEffect(() => {
     let cancelado = false
@@ -71,6 +81,9 @@ export default function Login() {
           </svg>
           <span>BioLink</span>
         </div>
+        <a className="nav-link" href="#planes">
+          Planes
+        </a>
       </div>
 
       <div className="site-hero">
@@ -88,78 +101,57 @@ export default function Login() {
             laboratorio en un solo sistema, con comunicación en tiempo real de punta a punta.
           </p>
           <div className="ctas">
-            <a className="primary" href="#conocer-biolink">
-              Conocer BioLink →
-            </a>
             <a className="ghost" href="#como-funciona">
-              Ver cómo funciona
+              Ver cómo funciona ↓
             </a>
           </div>
-          <p className="stack-line">REACT · SPRING BOOT · POSTGRESQL</p>
 
-          <div className="modules-row">
-            <div className="module">
-              <div className="m-head">
-                <span className="m-icon">
-                  <svg width="14" height="14" viewBox="0 0 24 24">
-                    <circle cx="12" cy="8" r="4" fill="#bfe9ec" />
-                    <path
-                      d="M4 20c0-4 4-6 8-6s8 2 8 6"
-                      stroke="#bfe9ec"
-                      strokeWidth="2"
-                      fill="none"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </span>
-                <span className="m-label">Pacientes</span>
+          <div className="preview" aria-label="Vista previa del sistema">
+            <div className="preview-bar">
+              <span className="pv-dot" />
+              <span className="pv-dot" />
+              <span className="pv-dot" />
+              <span className="pv-title">Monitor de equipos</span>
+              <span className="pv-tag">Vista previa</span>
+            </div>
+
+            <div className="pv-stats">
+              <div className="pv-stat">
+                <span className="pv-stat-label">Pacientes</span>
+                <span className="pv-stat-val">{mostrar(nPacientes)}</span>
               </div>
-              <div className="m-val">
-                {stats ? stats.pacientes : '—'} <span className="m-sub">registrados</span>
+              <div className="pv-stat">
+                <span className="pv-stat-label">Muestras</span>
+                <span className="pv-stat-val">{mostrar(nMuestras)}</span>
+              </div>
+              <div className="pv-stat">
+                <span className="pv-stat-label">Resultados</span>
+                <span className="pv-stat-val">{mostrar(nResultados)}</span>
               </div>
             </div>
 
-            <div className="module">
-              <div className="m-head">
-                <span className="m-icon">
-                  <svg width="14" height="14" viewBox="0 0 24 24">
-                    <rect x="5" y="3" width="14" height="18" rx="2" fill="none" stroke="#bfe9ec" strokeWidth="2" />
-                    <path
-                      d="M8 13l3 3 6-7"
-                      stroke="#f0895a"
-                      strokeWidth="2"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
-                <span className="m-label">Resultados</span>
-              </div>
-              <div className="m-val">
-                {stats ? stats.resultados : '—'} <span className="m-sub">cargados</span>
-              </div>
-            </div>
+            <ul className="pv-devices">
+              <li>
+                <span className="pv-led on" />
+                <span className="pv-dev-name">Analizador HbA1c</span>
+                <span className="pv-dev-meta">conectado · hace 12 s</span>
+              </li>
+              <li>
+                <span className="pv-led on" />
+                <span className="pv-dev-name">Hematología</span>
+                <span className="pv-dev-meta">conectado · hace 3 min</span>
+              </li>
+              <li>
+                <span className="pv-led off" />
+                <span className="pv-dev-name">Química clínica</span>
+                <span className="pv-dev-meta">desconectado</span>
+              </li>
+            </ul>
 
-            <div className="module">
-              <div className="m-head">
-                <span className="m-icon">
-                  <svg width="14" height="14" viewBox="0 0 24 24">
-                    <path
-                      d="M2 12h5l2-7 4 14 2-7h7"
-                      stroke="#bfe9ec"
-                      strokeWidth="2"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
-                <span className="m-label">Muestras</span>
-              </div>
-              <div className="m-val">
-                {stats ? stats.muestras : '—'} <span className="m-sub">registradas</span>
-              </div>
+            <div className="pv-msg">
+              <code>ORU^R01</code>
+              <span>resultado recibido del equipo</span>
+              <span className="pv-chip ok">Validado</span>
             </div>
           </div>
         </div>
@@ -205,20 +197,41 @@ export default function Login() {
           </div>
           <div className="field">
             <label htmlFor="password">Contraseña</label>
-            <input
-              id="password"
-              type="password"
-              placeholder="••••••••••"
-              autoComplete="current-password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-            />
+            <div className="pw-wrap">
+              <input
+                id="password"
+                type={verPassword ? 'text' : 'password'}
+                placeholder="Tu contraseña"
+                autoComplete="current-password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                required
+              />
+              <button
+                type="button"
+                className="pw-toggle"
+                onClick={() => setVerPassword((v) => !v)}
+                aria-label={verPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                aria-pressed={verPassword}
+              >
+                {verPassword ? (
+                  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                    <path d="M3 3l18 18M10.6 6.2A9.8 9.8 0 0 1 12 6c5 0 8.6 3.6 10 6-0.6 1.1-1.6 2.4-3 3.5M6.5 7.6C4.4 8.9 2.9 10.7 2 12c1.4 2.4 5 6 10 6 1.5 0 2.9-0.3 4.100-0.9M9.900 9.900a3 3 0 0 0 4.200 4.200" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                    <path d="M2 12c1.4-2.4 5-6 10-6s8.600 3.600 10 6c-1.400 2.400-5 6-10 6S3.400 14.400 2 12z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+                    <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" strokeWidth="1.8" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
           <div className="row-end">
-            <span className="password-hint">¿Olvidaste tu contraseña? Contacta a un administrador.</span>
+            <span className="password-hint">¿Olvidaste tu clave? Contacta al administrador.</span>
           </div>
           <button type="submit" className="cta" disabled={loading}>
+            {loading && <span className="btn-spin" aria-hidden="true" />}
             {loading ? 'Entrando…' : 'Entrar'}
           </button>
           <p className="foot">Acceso para recepción, bioanálisis y administración</p>
@@ -270,6 +283,8 @@ export default function Login() {
           </li>
         </ol>
       </section>
+
+      <PlanesSection />
     </div>
   )
 }

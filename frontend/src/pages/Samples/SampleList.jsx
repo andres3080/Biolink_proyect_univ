@@ -4,6 +4,8 @@ import { listarMuestras } from '../../api/muestraService.js'
 import { useAuth } from '../../context/AuthContext.jsx'
 import Pagination from '../../components/Pagination.jsx'
 import EstadoBadge from '../../components/EstadoBadge.jsx'
+import EmptyState from '../../components/EmptyState.jsx'
+import { SkeletonTable } from '../../components/Skeleton.jsx'
 import './SampleList.css'
 
 const ROLES_REGISTRAR = ['ADMIN', 'BIOANALISTA', 'RECEPCIONISTA']
@@ -101,13 +103,20 @@ export default function SampleList() {
           </p>
         )}
 
-        {!loading && !error && muestrasFiltradas.length === 0 && (
-          <p className="sample-empty">
-            {muestras.length === 0
-              ? 'Todavía no hay muestras registradas.'
-              : 'Ninguna muestra coincide con la búsqueda.'}
-          </p>
-        )}
+        {loading && <SkeletonTable filas={6} columnas={6} />}
+
+        {!loading && !error && muestrasFiltradas.length === 0 &&
+          (muestras.length === 0 ? (
+            <EmptyState
+              icono="muestra"
+              titulo="Todavía no hay muestras"
+              texto="Cuando se registren muestras aparecerán aquí con su código y estado."
+            >
+              {puedeRegistrar && <Link to="/muestras/nueva">Registrar muestra</Link>}
+            </EmptyState>
+          ) : (
+            <EmptyState icono="buscar" titulo="Sin coincidencias" texto="Ninguna muestra coincide con la búsqueda." />
+          ))}
 
         {!loading && muestrasFiltradas.length > 0 && (
           <div className="sample-table-wrap">

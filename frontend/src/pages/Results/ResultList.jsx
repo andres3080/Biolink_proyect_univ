@@ -4,6 +4,8 @@ import { useAuth } from '../../context/AuthContext.jsx'
 import { listarResultados } from '../../api/resultadoService.js'
 import Pagination from '../../components/Pagination.jsx'
 import EstadoBadge from '../../components/EstadoBadge.jsx'
+import EmptyState from '../../components/EmptyState.jsx'
+import { SkeletonTable } from '../../components/Skeleton.jsx'
 import './ResultList.css'
 
 const ROLES_CARGA = ['BIOANALISTA', 'ADMIN']
@@ -102,13 +104,18 @@ export default function ResultList() {
           </p>
         )}
 
-        {!loading && !error && resultadosFiltrados.length === 0 && (
-          <p className="result-empty">
-            {resultados.length === 0
-              ? 'Todavía no hay resultados cargados.'
-              : 'Ningún resultado coincide con la búsqueda.'}
-          </p>
-        )}
+        {loading && <SkeletonTable filas={6} columnas={6} />}
+
+        {!loading && !error && resultadosFiltrados.length === 0 &&
+          (resultados.length === 0 ? (
+            <EmptyState
+              icono="senal"
+              titulo="Todavía no hay resultados"
+              texto="Los resultados cargados a mano o recibidos del equipo por HL7 aparecerán aquí."
+            />
+          ) : (
+            <EmptyState icono="buscar" titulo="Sin coincidencias" texto="Ningún resultado coincide con la búsqueda." />
+          ))}
 
         {!loading && resultadosFiltrados.length > 0 && (
           <div className="result-table-wrap">

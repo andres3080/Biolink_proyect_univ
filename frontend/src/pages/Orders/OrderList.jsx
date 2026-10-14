@@ -4,6 +4,8 @@ import { listarOrdenes } from '../../api/ordenService.js'
 import { useAuth } from '../../context/AuthContext.jsx'
 import Pagination from '../../components/Pagination.jsx'
 import EstadoBadge from '../../components/EstadoBadge.jsx'
+import EmptyState from '../../components/EmptyState.jsx'
+import { SkeletonTable } from '../../components/Skeleton.jsx'
 import './OrderList.css'
 
 const ROLES_CREAR = ['ADMIN', 'RECEPCIONISTA']
@@ -105,17 +107,20 @@ export default function OrderList() {
           </p>
         )}
 
-        {!loading && !error && ordenesFiltradas.length === 0 && (
-          <p className="order-empty">
-            {ordenes.length === 0 ? (
-              <>
-                Todavía no hay órdenes médicas creadas. <Link to="/ordenes/nueva">Crea una primero</Link>.
-              </>
-            ) : (
-              'Ninguna orden coincide con la búsqueda.'
-            )}
-          </p>
-        )}
+        {loading && <SkeletonTable filas={6} columnas={5} />}
+
+        {!loading && !error && ordenesFiltradas.length === 0 &&
+          (ordenes.length === 0 ? (
+            <EmptyState
+              icono="lista"
+              titulo="Todavía no hay órdenes médicas"
+              texto="Crea la primera orden para que se pueda registrar su muestra."
+            >
+              <Link to="/ordenes/nueva">Crear una orden</Link>
+            </EmptyState>
+          ) : (
+            <EmptyState icono="buscar" titulo="Sin coincidencias" texto="Ninguna orden coincide con la búsqueda." />
+          ))}
 
         {!loading && ordenesPagina.length > 0 && (
           <div className="order-table-wrap">

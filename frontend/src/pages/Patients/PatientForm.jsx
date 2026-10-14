@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { crearPaciente } from '../../api/pacienteService.js'
+import SuccessCheck from '../../components/SuccessCheck.jsx'
+import { useToast } from '../../components/Toast.jsx'
 import './PatientForm.css'
 
 const initialForm = {
@@ -15,7 +17,8 @@ export default function PatientForm() {
   const [form, setForm] = useState(initialForm)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [success, setSuccess] = useState(null)
+  const [feedback, setFeedback] = useState({ status: 'idle' })
+  const toast = useToast()
 
   function handleChange(event) {
     const { name, value } = event.target
@@ -25,18 +28,23 @@ export default function PatientForm() {
   async function handleSubmit(event) {
     event.preventDefault()
     setError(null)
-    setSuccess(null)
     setLoading(true)
+    setFeedback({ status: 'loading' })
     try {
       const paciente = await crearPaciente({
         ...form,
         fechaNacimiento: form.fechaNacimiento || null,
       })
-      setSuccess(`Paciente "${paciente.nombreCompleto}" registrado (id ${paciente.id}).`)
+      setFeedback({
+        status: 'success',
+        title: 'Paciente registrado',
+        detail: paciente.nombreCompleto,
+      })
       setForm(initialForm)
     } catch (err) {
       const backendMsg = err.response?.data?.error || err.response?.data?.message
-      setError(
+      setFeedback({ status: 'idle' })
+      toast.error(
         backendMsg ||
           'No se pudo registrar el paciente. Verifica los datos (el documento debe ser único) e intenta de nuevo.'
       )
@@ -55,7 +63,6 @@ export default function PatientForm() {
           </Link>
         </div>
 
-        {success && <p className="form-info">{success}</p>}
         {error && (
           <p className="form-error" role="alert">
             {error}
@@ -129,6 +136,16 @@ export default function PatientForm() {
           </button>
         </form>
       </div>
+
+      <SuccessCheck
+        status={feedback.status}
+        title={feedback.title}
+        detail={feedback.detail}
+        onClose={() => setFeedback({ status: 'idle' })}
+      >
+        <Link to="/ordenes/nueva">Crear una orden</Link>
+        <Link to="/pacientes">Ver pacientes</Link>
+      </SuccessCheck>
     </div>
   )
 }

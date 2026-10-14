@@ -180,6 +180,14 @@ export default function Dashboard() {
                 <span className="action-desc">Ver, crear y corregir exámenes del catálogo</span>
               </Link>
             )}
+            {esAdmin && (
+              <Link to="/facturacion" className="action-card">
+                <span className="action-title">
+                  Plan y facturación <span className="action-arrow">→</span>
+                </span>
+                <span className="action-desc">Suscripción, uso del plan e historial de pagos</span>
+              </Link>
+            )}
           </div>
 
           <aside className="stats-panel">

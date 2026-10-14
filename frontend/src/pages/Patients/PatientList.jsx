@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { listarPacientes } from '../../api/pacienteService.js'
 import { useAuth } from '../../context/AuthContext.jsx'
 import Pagination from '../../components/Pagination.jsx'
+import EmptyState from '../../components/EmptyState.jsx'
+import { SkeletonTable } from '../../components/Skeleton.jsx'
 import './PatientList.css'
 
 const SEXO_LABEL = { F: 'Femenino', M: 'Masculino', OTRO: 'Otro' }
@@ -98,13 +100,20 @@ export default function PatientList() {
           </p>
         )}
 
-        {!loading && !error && pacientesFiltrados.length === 0 && (
-          <p className="patient-empty">
-            {pacientes.length === 0
-              ? 'Todavía no hay pacientes registrados.'
-              : 'Ningún paciente coincide con la búsqueda.'}
-          </p>
-        )}
+        {loading && <SkeletonTable filas={6} columnas={5} />}
+
+        {!loading && !error && pacientesFiltrados.length === 0 &&
+          (pacientes.length === 0 ? (
+            <EmptyState
+              icono="persona"
+              titulo="Todavía no hay pacientes"
+              texto="Registra al primer paciente para empezar a crear órdenes."
+            >
+              <Link to="/pacientes/nuevo">Registrar paciente</Link>
+            </EmptyState>
+          ) : (
+            <EmptyState icono="buscar" titulo="Sin coincidencias" texto="Ningún paciente coincide con la búsqueda." />
+          ))}
 
         {!loading && pacientesFiltrados.length > 0 && (
           <div className="patient-table-wrap">

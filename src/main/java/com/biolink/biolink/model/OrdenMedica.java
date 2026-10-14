@@ -25,7 +25,7 @@ public class OrdenMedica {
     @JoinColumn(name = "paciente_id", nullable = false)
     private Paciente paciente;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "orden_examen",
             joinColumns = @JoinColumn(name = "orden_id"),

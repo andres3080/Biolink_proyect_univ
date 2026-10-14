@@ -4,6 +4,10 @@ import { listarPacientes } from '../../api/pacienteService.js'
 import { listarExamenes } from '../../api/examenService.js'
 import { crearOrden } from '../../api/ordenService.js'
 import { extraerMensajeError } from '../../utils/errorMessage.js'
+import SuccessCheck from '../../components/SuccessCheck.jsx'
+import EmptyState from '../../components/EmptyState.jsx'
+import { SkeletonForm } from '../../components/Skeleton.jsx'
+import { useToast } from '../../components/Toast.jsx'
 import './OrderForm.css'
 
 function hoyISO() {
@@ -23,7 +27,8 @@ export default function OrderForm() {
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [success, setSuccess] = useState(null)
+  const [feedback, setFeedback] = useState({ status: 'idle' })
+  const toast = useToast()
 
   function cargarCatalogos() {
     setLoadingCatalogos(true)
@@ -50,7 +55,6 @@ export default function OrderForm() {
   async function handleSubmit(event) {
     event.preventDefault()
     setError(null)
-    setSuccess(null)
     if (!pacienteId) {
       setError('Selecciona un paciente.')
       return
@@ -60,6 +64,7 @@ export default function OrderForm() {
       return
     }
     setLoading(true)
+    setFeedback({ status: 'loading' })
     try {
       const orden = await crearOrden({
         paciente: { id: Number(pacienteId) },
@@ -68,13 +73,18 @@ export default function OrderForm() {
         fechaOrden,
         estado: 'PENDIENTE',
       })
-      setSuccess(`Orden #${orden.id} creada con ${examenesSeleccionados.length} examen(es).`)
+      setFeedback({
+        status: 'success',
+        title: 'Orden creada',
+        detail: `Orden #${orden.id} con ${examenesSeleccionados.length} examen(es).`,
+      })
       setPacienteId('')
       setMedicoSolicitante('')
       setFechaOrden(hoyISO())
       setExamenesSeleccionados([])
     } catch (err) {
-      setError(extraerMensajeError(err, 'No se pudo crear la orden. Verifica los datos e intenta de nuevo.'))
+      setFeedback({ status: 'idle' })
+      toast.error(extraerMensajeError(err, 'No se pudo crear la orden. Verifica los datos e intenta de nuevo.'))
     } finally {
       setLoading(false)
     }
@@ -89,24 +99,31 @@ export default function OrderForm() {
             ← Volver
           </Link>
         </div>
-        {success && <p className="form-info">{success}</p>}
         {error && (
           <p className="form-error" role="alert">
             {error}
           </p>
         )}
-        {errorCatalogos && (
-          <p className="form-error" role="alert">
-            {errorCatalogos}
-          </p>
-        )}
         {loadingCatalogos ? (
-          <p className="order-loading">Cargando pacientes y exámenes…</p>
+          <SkeletonForm campos={4} />
+        ) : errorCatalogos ? (
+          <EmptyState
+            icono="senal"
+            titulo="No pudimos cargar los datos"
+            texto="Revisa que el servidor esté en ejecución y que tu sesión siga activa. Luego intenta de nuevo."
+          >
+            <button type="button" onClick={() => window.location.reload()}>
+              Reintentar
+            </button>
+          </EmptyState>
         ) : pacientes.length === 0 ? (
-          <p className="order-empty">
-            Todavía no hay pacientes registrados.{' '}
-            <Link to="/pacientes/nuevo">Registra uno primero</Link>.
-          </p>
+          <EmptyState
+            icono="persona"
+            titulo="Todavía no hay pacientes"
+            texto="Para crear una orden primero hay que registrar al paciente."
+          >
+            <Link to="/pacientes/nuevo">Registrar paciente</Link>
+          </EmptyState>
         ) : (
           <form onSubmit={handleSubmit}>
             <div className="field">
@@ -179,6 +196,16 @@ export default function OrderForm() {
           </form>
         )}
       </div>
+
+      <SuccessCheck
+        status={feedback.status}
+        title={feedback.title}
+        detail={feedback.detail}
+        onClose={() => setFeedback({ status: 'idle' })}
+      >
+        <Link to="/muestras/nueva">Registrar muestra</Link>
+        <Link to="/ordenes">Ver órdenes</Link>
+      </SuccessCheck>
     </div>
   )
 }

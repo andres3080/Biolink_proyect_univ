@@ -13,10 +13,15 @@ import ResultList from './pages/Results/ResultList.jsx'
 import ExamCatalog from './pages/Exams/ExamCatalog.jsx'
 import EquipoList from './pages/Equipos/EquipoList.jsx'
 import UserForm from './pages/Users/UserForm.jsx'
+import Checkout from './pages/Billing/Checkout.jsx'
+import PaymentResult from './pages/Billing/PaymentResult.jsx'
+import Billing from './pages/Billing/Billing.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
+import Asistente from './components/Asistente.jsx'
 
 export default function App() {
   return (
+    <>
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route
@@ -123,7 +128,33 @@ export default function App() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/facturacion"
+        element={
+          <ProtectedRoute allowedRoles={['ADMIN']}>
+            <Billing />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/checkout"
+        element={
+          <ProtectedRoute allowedRoles={['ADMIN']}>
+            <Checkout />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/pagos/resultado"
+        element={
+          <ProtectedRoute allowedRoles={['ADMIN']}>
+            <PaymentResult />
+          </ProtectedRoute>
+        }
+      />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    <Asistente />
+    </>
   )
 }

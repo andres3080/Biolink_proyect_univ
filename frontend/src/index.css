@@ -21,3 +21,86 @@ p {
 code {
   font-family: "IBM Plex Mono", ui-monospace, monospace;
 }
+
+/* ---------- Pulido general de la interfaz ---------- */
+::selection {
+  background: rgba(95, 214, 223, 0.35);
+  color: #fff;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #8fe3d6;
+  outline-offset: 2px;
+}
+
+/* Las tarjetas principales de cada pantalla entran con una animación suave */
+.sample-form-card,
+.sample-list-card,
+.order-form-card,
+.order-list-card,
+.patient-form-card,
+.patient-list-card,
+.result-form-card,
+.result-list-card,
+.user-form-card,
+.equipo-list-card,
+.exam-catalog-card {
+  animation: cardIn 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Botones principales y enlaces de acción: respuesta al pasar el mouse */
+button.cta,
+.cta-link {
+  transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
+}
+button.cta:not(:disabled):hover,
+.cta-link:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.07);
+}
+button.cta:not(:disabled):active,
+.cta-link:active {
+  transform: translateY(1px);
+}
+button.cta:disabled {
+  filter: grayscale(0.25);
+}
+
+/* Filas de tabla con resalte al pasar el mouse */
+table tbody tr {
+  transition: background 0.15s ease;
+}
+table tbody tr:hover {
+  background: rgba(95, 214, 223, 0.06);
+}
+
+/* Barra de desplazamiento acorde al tema oscuro */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(127, 212, 218, 0.35) transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

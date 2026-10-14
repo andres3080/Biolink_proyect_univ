@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom'
 import { listarMuestras } from '../../api/muestraService.js'
 import { crearResultado } from '../../api/resultadoService.js'
 import { extraerMensajeError } from '../../utils/errorMessage.js'
+import SuccessCheck from '../../components/SuccessCheck.jsx'
+import EmptyState from '../../components/EmptyState.jsx'
+import { SkeletonForm } from '../../components/Skeleton.jsx'
+import { useToast } from '../../components/Toast.jsx'
 import './ResultForm.css'
 
 // El backend guarda observaciones en un VARCHAR(255) (Resultado.java no define
@@ -29,8 +33,8 @@ export default function ResultForm() {
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [success, setSuccess] = useState(null)
-  const [successAlerta, setSuccessAlerta] = useState(false)
+  const [feedback, setFeedback] = useState({ status: 'idle' })
+  const toast = useToast()
 
   useEffect(() => {
     let cancelado = false
@@ -59,7 +63,6 @@ export default function ResultForm() {
   async function handleSubmit(event) {
     event.preventDefault()
     setError(null)
-    setSuccess(null)
 
     if (!muestraId) {
       setError('Selecciona la muestra a la que pertenece este resultado.')
@@ -71,6 +74,7 @@ export default function ResultForm() {
     }
 
     setLoading(true)
+    setFeedback({ status: 'loading' })
     try {
       const resultado = await crearResultado({
         muestra: { id: Number(muestraId) },
@@ -79,21 +83,24 @@ export default function ResultForm() {
         observaciones: observaciones.trim() || null,
       })
       const alerta = resultado.estado === 'PENDIENTE_REVISION'
-      setSuccessAlerta(alerta)
-      setSuccess(
-        alerta
-          ? `Resultado guardado (id ${resultado.id}) — quedó fuera de rango, estado: PENDIENTE_REVISION.`
-          : `Resultado guardado (id ${resultado.id}) — dentro de rango, estado: VALIDADO.`
-      )
+      setFeedback({
+        status: 'success',
+        tone: alerta ? 'alerta' : 'ok',
+        title: 'Resultado guardado',
+        detail: alerta
+          ? 'Quedó fuera del rango de referencia: pendiente de revisión.'
+          : 'Está dentro del rango de referencia: validado.',
+      })
       setMuestraId('')
       setValorObtenido('')
       setFechaResultado(ahoraLocal())
       setObservaciones('')
     } catch (err) {
+      setFeedback({ status: 'idle' })
       if (err?.response?.status === 403) {
-        setError('No tienes permiso para cargar resultados.')
+        toast.error('No tienes permiso para cargar resultados.')
       } else {
-        setError(extraerMensajeError(err, 'No se pudo guardar el resultado. Verifica los datos e intenta de nuevo.'))
+        toast.error(extraerMensajeError(err, 'No se pudo guardar el resultado. Verifica los datos e intenta de nuevo.'))
       }
     } finally {
       setLoading(false)
@@ -109,26 +116,31 @@ export default function ResultForm() {
             ← Volver
           </Link>
         </div>
-        {success && (
-          <p className={successAlerta ? 'form-warning' : 'form-info'}>{success}</p>
-        )}
         {error && (
           <p className="form-error" role="alert">
             {error}
           </p>
         )}
-        {errorMuestras && (
-          <p className="form-error" role="alert">
-            {errorMuestras}
-          </p>
-        )}
         {loadingMuestras ? (
-          <p className="result-loading">Cargando muestras…</p>
+          <SkeletonForm campos={4} />
+        ) : errorMuestras ? (
+          <EmptyState
+            icono="senal"
+            titulo="No pudimos cargar las muestras"
+            texto="Revisa que el servidor esté en ejecución y que tu sesión siga activa. Luego intenta de nuevo."
+          >
+            <button type="button" onClick={() => window.location.reload()}>
+              Reintentar
+            </button>
+          </EmptyState>
         ) : muestras.length === 0 ? (
-          <p className="result-empty">
-            Todavía no hay muestras registradas.{' '}
-            <Link to="/muestras/nueva">Registra una primero</Link>.
-          </p>
+          <EmptyState
+            icono="muestra"
+            titulo="Todavía no hay muestras"
+            texto="Para cargar un resultado primero hay que registrar la muestra."
+          >
+            <Link to="/muestras/nueva">Registrar muestra</Link>
+          </EmptyState>
         ) : (
           <form onSubmit={handleSubmit}>
             <div className="field">
@@ -201,6 +213,16 @@ export default function ResultForm() {
           </form>
         )}
       </div>
+
+      <SuccessCheck
+        status={feedback.status}
+        tone={feedback.tone}
+        title={feedback.title}
+        detail={feedback.detail}
+        onClose={() => setFeedback({ status: 'idle' })}
+      >
+        <Link to="/resultados">Ver resultados</Link>
+      </SuccessCheck>
     </div>
   )
 }

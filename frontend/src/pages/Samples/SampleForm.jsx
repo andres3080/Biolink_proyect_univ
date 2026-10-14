@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom'
 import { listarOrdenes } from '../../api/ordenService.js'
 import { crearMuestra } from '../../api/muestraService.js'
 import { extraerMensajeError } from '../../utils/errorMessage.js'
+import SuccessCheck from '../../components/SuccessCheck.jsx'
+import EmptyState from '../../components/EmptyState.jsx'
+import { SkeletonForm } from '../../components/Skeleton.jsx'
+import { useToast } from '../../components/Toast.jsx'
 import './SampleForm.css'
 
 const TIPOS_MUESTRA = ['Sangre', 'Orina', 'Heces', 'Esputo', 'Hisopado', 'Otro']
@@ -35,7 +39,8 @@ export default function SampleForm() {
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [success, setSuccess] = useState(null)
+  const [feedback, setFeedback] = useState({ status: 'idle' })
+  const toast = useToast()
 
   useEffect(() => {
     let cancelado = false
@@ -76,7 +81,6 @@ export default function SampleForm() {
   async function handleSubmit(event) {
     event.preventDefault()
     setError(null)
-    setSuccess(null)
 
     if (!ordenId) {
       setError('Selecciona una orden médica.')
@@ -97,6 +101,7 @@ export default function SampleForm() {
     }
 
     setLoading(true)
+    setFeedback({ status: 'loading' })
     try {
       const muestra = await crearMuestra({
         codigoBarras: codigoBarras.trim(),
@@ -106,7 +111,11 @@ export default function SampleForm() {
         fechaToma,
         estado: 'TOMADA',
       })
-      setSuccess(`Muestra ${muestra.codigoBarras} registrada (id ${muestra.id}).`)
+      setFeedback({
+        status: 'success',
+        title: 'Muestra registrada',
+        detail: `Código ${muestra.codigoBarras}`,
+      })
       setOrdenId('')
       setExamenId('')
       setTipoMuestra('')
@@ -115,7 +124,10 @@ export default function SampleForm() {
       setCodigoBarras('')
       setCodigoManual(false)
     } catch (err) {
-      setError(extraerMensajeError(err, 'No se pudo registrar la muestra. Verifica los datos e intenta de nuevo.'))
+      setFeedback({ status: 'idle' })
+      toast.error(
+        extraerMensajeError(err, 'No se pudo registrar la muestra. Verifica los datos e intenta de nuevo.')
+      )
     } finally {
       setLoading(false)
     }
@@ -130,24 +142,31 @@ export default function SampleForm() {
             ← Volver
           </Link>
         </div>
-        {success && <p className="form-info">{success}</p>}
         {error && (
           <p className="form-error" role="alert">
             {error}
           </p>
         )}
-        {errorOrdenes && (
-          <p className="form-error" role="alert">
-            {errorOrdenes}
-          </p>
-        )}
         {loadingOrdenes ? (
-          <p className="sample-loading">Cargando órdenes médicas…</p>
+          <SkeletonForm campos={4} />
+        ) : errorOrdenes ? (
+          <EmptyState
+            icono="senal"
+            titulo="No pudimos cargar las órdenes"
+            texto="Revisa que el servidor esté en ejecución y que tu sesión siga activa. Luego intenta de nuevo."
+          >
+            <button type="button" onClick={() => window.location.reload()}>
+              Reintentar
+            </button>
+          </EmptyState>
         ) : ordenes.length === 0 ? (
-          <p className="sample-empty">
-            Todavía no hay órdenes médicas creadas.{' '}
-            <Link to="/ordenes/nueva">Crea una primero</Link>.
-          </p>
+          <EmptyState
+            icono="lista"
+            titulo="Todavía no hay órdenes médicas"
+            texto="Para registrar una muestra primero hay que crear la orden del paciente."
+          >
+            <Link to="/ordenes/nueva">Crear una orden</Link>
+          </EmptyState>
         ) : (
           <form onSubmit={handleSubmit}>
             <div className="field">
@@ -257,6 +276,18 @@ export default function SampleForm() {
           </form>
         )}
       </div>
+
+      <SuccessCheck
+        status={feedback.status}
+        title={feedback.title}
+        detail={feedback.detail}
+        onClose={() => setFeedback({ status: 'idle' })}
+      >
+        <Link to="/muestras">Ver muestras</Link>
+        <button type="button" onClick={() => setFeedback({ status: 'idle' })}>
+          Registrar otra
+        </button>
+      </SuccessCheck>
     </div>
   )
 }

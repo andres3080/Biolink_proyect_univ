@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { crearUsuario } from '../../api/authService.js'
 import { listarUsuarios, restablecerPassword } from '../../api/usuarioService.js'
 import { extraerMensajeError } from '../../utils/errorMessage.js'
+import SuccessCheck from '../../components/SuccessCheck.jsx'
+import { useToast } from '../../components/Toast.jsx'
 import './UserForm.css'
 
 const ROLES_DISPONIBLES = ['ADMIN', 'BIOANALISTA', 'RECEPCIONISTA']
@@ -14,12 +16,12 @@ export default function UserForm() {
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [success, setSuccess] = useState(null)
+  const [feedback, setFeedback] = useState({ status: 'idle' })
+  const toast = useToast()
 
   const [usuarios, setUsuarios] = useState([])
   const [loadingUsuarios, setLoadingUsuarios] = useState(true)
   const [errorUsuarios, setErrorUsuarios] = useState(null)
-  const [listSuccess, setListSuccess] = useState(null)
 
   const [resetId, setResetId] = useState(null)
   const [resetPassword, setResetPassword] = useState('')
@@ -42,7 +44,6 @@ export default function UserForm() {
   async function handleSubmit(event) {
     event.preventDefault()
     setError(null)
-    setSuccess(null)
 
     if (!username.trim() || !password) {
       setError('Usuario y contraseña son obligatorios.')
@@ -54,22 +55,27 @@ export default function UserForm() {
     }
 
     setLoading(true)
+    setFeedback({ status: 'loading' })
     try {
       const creado = await crearUsuario({ username: username.trim(), password, rol })
-      setSuccess(`Usuario "${creado.username}" creado con rol ${creado.rol}.`)
+      setFeedback({
+        status: 'success',
+        title: 'Usuario creado',
+        detail: `${creado.username} · rol ${creado.rol}`,
+      })
       setUsername('')
       setPassword('')
       setRol('RECEPCIONISTA')
       cargarUsuarios()
     } catch (err) {
-      setError(extraerMensajeError(err, 'No se pudo crear el usuario. Verifica los datos e intenta de nuevo.'))
+      setFeedback({ status: 'idle' })
+      toast.error(extraerMensajeError(err, 'No se pudo crear el usuario. Verifica los datos e intenta de nuevo.'))
     } finally {
       setLoading(false)
     }
   }
 
   function abrirReset(usuario) {
-    setListSuccess(null)
     if (resetId === usuario.id) {
       setResetId(null)
       return
@@ -99,7 +105,7 @@ export default function UserForm() {
       await restablecerPassword(usuario.id, resetPassword)
       setResetId(null)
       setResetPassword('')
-      setListSuccess(`Contraseña de "${usuario.username}" actualizada.`)
+      toast.success(`Contraseña de "${usuario.username}" actualizada.`)
     } catch (err) {
       setResetError(extraerMensajeError(err, 'No se pudo actualizar la contraseña.'))
     } finally {
@@ -121,14 +127,6 @@ export default function UserForm() {
             Crea una cuenta de acceso para personal de recepción, bioanálisis o administración.
           </p>
 
-          {success && (
-            <div className="form-success">
-              <span className="success-check" aria-hidden="true">
-                ✓
-              </span>
-              <span>{success}</span>
-            </div>
-          )}
           {error && (
             <p className="form-error" role="alert">
               {error}
@@ -179,14 +177,6 @@ export default function UserForm() {
         <div className="user-form-card">
           <h2>Usuarios registrados</h2>
 
-          {listSuccess && (
-            <div className="form-success">
-              <span className="success-check" aria-hidden="true">
-                ✓
-              </span>
-              <span>{listSuccess}</span>
-            </div>
-          )}
           {errorUsuarios && (
             <p className="form-error" role="alert">
               {errorUsuarios}
@@ -254,6 +244,13 @@ export default function UserForm() {
           )}
         </div>
       </div>
+
+      <SuccessCheck
+        status={feedback.status}
+        title={feedback.title}
+        detail={feedback.detail}
+        onClose={() => setFeedback({ status: 'idle' })}
+      />
     </div>
   )
 }

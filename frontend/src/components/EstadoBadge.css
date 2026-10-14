@@ -37,3 +37,9 @@
   color: #8fabae;
   border-color: rgba(255, 255, 255, 0.12);
 }
+
+.estado-pill.tono-error {
+  background: rgba(224, 76, 76, 0.14);
+  color: #e58a8a;
+  border-color: rgba(224, 76, 76, 0.35);
+}

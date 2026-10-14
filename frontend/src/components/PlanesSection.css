@@ -1,0 +1,212 @@
+.planes-section {
+  position: relative;
+  z-index: 2;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 32px 80px;
+  scroll-margin-top: 24px;
+  text-align: center;
+  font-family: "Public Sans", system-ui, sans-serif;
+}
+.planes-kicker {
+  display: inline-block;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  color: #7fd4da;
+  margin-bottom: 10px;
+}
+.planes-section h2 {
+  font-family: "Sora", sans-serif;
+  font-size: 1.6rem;
+  color: #f4faf9;
+  margin: 0 0 10px;
+}
+.planes-sub {
+  color: #a9c6c8;
+  font-size: 0.95rem;
+  margin: 0 0 22px;
+}
+
+.planes-toggle {
+  display: inline-flex;
+  padding: 4px;
+  gap: 4px;
+  border-radius: 999px;
+  background: rgba(18, 42, 46, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 30px;
+}
+.planes-toggle button {
+  border: 0;
+  background: transparent;
+  color: #a9c6c8;
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 8px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.planes-toggle button.activo {
+  background: linear-gradient(135deg, #2fafb8, #5fd6df);
+  color: #04201f;
+  font-weight: 600;
+}
+.planes-ahorro {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.66rem;
+  margin-left: 6px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(240, 137, 90, 0.22);
+  color: #f0b08a;
+}
+.planes-toggle button.activo .planes-ahorro {
+  background: rgba(4, 32, 31, 0.18);
+  color: #04201f;
+}
+
+.planes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+  text-align: left;
+}
+.plan-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 26px 24px 24px;
+  border-radius: 20px;
+  background: rgba(18, 42, 46, 0.55);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  animation: planIn 0.5s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+  transition: transform 0.22s ease, border-color 0.22s ease;
+}
+.plan-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(143, 227, 214, 0.35);
+}
+.plan-card.destacado {
+  border-color: rgba(95, 214, 223, 0.55);
+  background: linear-gradient(180deg, rgba(30, 74, 80, 0.62), rgba(18, 42, 46, 0.6));
+  box-shadow: 0 22px 60px rgba(47, 175, 184, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.plan-tag {
+  position: absolute;
+  top: -12px;
+  left: 24px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f0895a, #f0b25a);
+  color: #2a1204;
+  font-weight: 600;
+}
+.plan-card h3 {
+  font-family: "Sora", sans-serif;
+  font-size: 1.15rem;
+  margin: 0 0 6px;
+  color: #f4faf9;
+}
+.plan-desc {
+  font-size: 0.82rem;
+  color: #8fabae;
+  margin: 0 0 16px;
+  min-height: 2.4em;
+  line-height: 1.45;
+}
+.plan-precio {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.plan-monto {
+  font-family: "Sora", sans-serif;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #f4faf9;
+}
+.plan-periodo {
+  font-size: 0.85rem;
+  color: #8fabae;
+}
+.plan-equiv {
+  margin: 4px 0 18px;
+  font-size: 0.75rem;
+  color: #7fd4da;
+  font-family: "IBM Plex Mono", monospace;
+}
+.plan-lista {
+  list-style: none;
+  margin: 0 0 22px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.plan-lista li {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  font-size: 0.86rem;
+  color: #cfe3e4;
+  line-height: 1.4;
+}
+.plan-lista svg {
+  flex: none;
+  margin-top: 2px;
+  color: #7ed69a;
+}
+.plan-cta {
+  border: 1px solid rgba(143, 227, 214, 0.4);
+  background: rgba(95, 214, 223, 0.08);
+  color: #bdeff0;
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 12px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+.plan-cta:hover {
+  background: rgba(95, 214, 223, 0.18);
+}
+.plan-cta:active {
+  transform: scale(0.98);
+}
+.plan-card.destacado .plan-cta {
+  border: 0;
+  color: #04201f;
+  background: linear-gradient(135deg, #2fafb8, #5fd6df);
+  box-shadow: 0 10px 26px rgba(47, 175, 184, 0.35);
+}
+.planes-nota {
+  margin: 26px 0 0;
+  font-size: 0.78rem;
+  color: #7f9a9d;
+}
+
+@keyframes planIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (max-width: 900px) {
+  .planes-grid { grid-template-columns: 1fr; max-width: 460px; margin: 0 auto; }
+  .plan-desc { min-height: 0; }
+  .planes-section { padding: 16px 20px 64px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .plan-card { animation: none; transition: none; }
+  .plan-card:hover { transform: none; }
+}

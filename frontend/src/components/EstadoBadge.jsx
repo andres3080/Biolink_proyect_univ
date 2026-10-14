@@ -11,6 +11,11 @@ const ESTADO_INFO = {
   PROCESADA: { label: 'Procesada', tono: 'ok' },
   VALIDADO: { label: 'Validado', tono: 'ok' },
   PENDIENTE_REVISION: { label: 'Pendiente de revisión', tono: 'alerta' },
+  // Pagos de suscripción
+  APROBADO: { label: 'Aprobado', tono: 'ok' },
+  RECHAZADO: { label: 'Rechazado', tono: 'error' },
+  ANULADO: { label: 'Anulado', tono: 'desconocido' },
+  ERROR: { label: 'Error', tono: 'error' },
 }
 
 export default function EstadoBadge({ estado }) {
